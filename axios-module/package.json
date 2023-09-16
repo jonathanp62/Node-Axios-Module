@@ -16,9 +16,6 @@
   "bin": {
     "run": "./src/index.mjs"
   },
-  "scripts": {
-    "test": "node --test test/parse-test.mjs"
-  },
   "author": "Jonathan Parker",
   "license": "ISC",
   "dependencies": {
