@@ -34,10 +34,7 @@ class AxiosModule {
             .help()
             .argv;
 
-        if (args.name !== undefined)
-            console.log(`Hello, ${args.name}. Here's a random joke...`);
-        else
-            console.log(`Hello here's a random joke...`);
+        this.greet(args.name);
 
         axios.get(config.joke.url, { headers: { Accept: config.joke.accept } })
             .then(response => {
@@ -49,7 +46,52 @@ class AxiosModule {
      * Invoke axios with a search parameter.
      */
     invokeAxiosWithSearch() {
+        const args = Yargs(hideBin(process.argv))
+            .command('invoke [name] [search]', 'invoke axios', (yargs) => {
+                return yargs
+                    .option('n', {
+                        alias: 'name',
+                        type: 'string',
+                        description: 'Your name',
+                        demandOption: true
+                    })
+                    .option('s', {
+                        alias: 'search',
+                        type: 'string',
+                        description: 'Search term'
+                })
+            })
+            .help()
+            .argv;
 
+        if (args.search) {
+            this.greet(args.name);
+
+            const url = `${config.joke.url}search?term=${escape(args.search)}`
+
+            axios.get(url, { headers: { Accept: config.joke.accept } })
+                .then(response => {
+                    response.data.results.forEach( j => {
+                        console.log("\n" + j.joke);
+                    });
+
+                    if (response.data.results.length === 0) {
+                        console.log(`No ${args.search} jokes found`);
+                    }
+                });
+        }
+    }
+
+    /**
+     * Greet the named or unnamed individual.
+     *
+     * @param   {string}    name
+     */
+    greet(name) {
+        if (name)
+            console.log(`Hello ${name}, here's a random joke...`);
+        else
+            console.log(`Hello, here's a random joke...`);
     }
 }
 
