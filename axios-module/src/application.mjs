@@ -20,6 +20,7 @@ class Application {
         const axiosModule = new AxiosModule();
 
         axiosModule.invokeAxios();
+        axiosModule.invokeAxiosWithSearch();
     }
 }
 

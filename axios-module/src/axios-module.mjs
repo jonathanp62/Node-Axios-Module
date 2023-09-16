@@ -10,6 +10,7 @@
 import axios from 'axios';
 import Yargs from 'yargs';
 
+import { config } from "../config.mjs";
 import { hideBin } from "yargs/helpers";
 
 /**
@@ -17,7 +18,7 @@ import { hideBin } from "yargs/helpers";
  */
 class AxiosModule {
     /**
-     * The run method.
+     * The invoke axios method.
      */
     invokeAxios() {
         const args = Yargs(hideBin(process.argv))
@@ -38,12 +39,17 @@ class AxiosModule {
         else
             console.log(`Hello here's a random joke...`);
 
-        const url = 'https://icanhazdadjoke.com/';
-
-        axios.get(url, { headers: { Accept: 'application/json' } })
+        axios.get(config.joke.url, { headers: { Accept: config.joke.accept } })
             .then(response => {
                 console.log(response.data.joke);
             });
+    }
+
+    /**
+     * Invoke axios with a search parameter.
+     */
+    invokeAxiosWithSearch() {
+
     }
 }
 
