@@ -7,7 +7,10 @@
  * All Rights Reserved.
  */
 
-//import { ProcessModule } from "./process-module.mjs";
+import axios from 'axios';
+import Yargs from 'yargs';
+
+import { hideBin } from "yargs/helpers";
 
 /**
  * The application class.
@@ -17,7 +20,30 @@ class AxiosModule {
      * The run method.
      */
     invokeAxios() {
-        console.log("Good afternoon");
+        const args = Yargs(hideBin(process.argv))
+            .command('invoke [name]', 'invoke axios', (yargs) => {
+                return yargs
+                    .option('n', {
+                        alias: 'name',
+                        type: 'string',
+                        description: 'Your name',
+                        demandOption: true
+                    })
+            })
+            .help()
+            .argv;
+
+        if (args.name !== undefined)
+            console.log(`Hello, ${args.name}. Here's a random joke...`);
+        else
+            console.log(`Hello here's a random joke...`);
+
+        const url = 'https://icanhazdadjoke.com/';
+
+        axios.get(url, { headers: { Accept: 'application/json' } })
+            .then(response => {
+                console.log(response.data.joke);
+            });
     }
 }
 
